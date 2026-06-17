@@ -1,0 +1,17 @@
+flowchart LR
+  feature["feature/*"] --> pr["Pull Request"]
+  pr --> ci["CI: lint + tests + build"]
+  ci --> develop["develop"]
+  develop --> qa["Deploy automatico QA"]
+  qa --> release["release/*"]
+  release --> uat["Deploy UAT<br/>aprobacion manual + smoke tests"]
+  uat --> main["main + tag"]
+  main --> prod["Deploy Produccion<br/>rolling update + rollback"]
+
+  ci --> ecr["Push imagenes a ECR"]
+  prod --> eks["EKS"]
+  qa --> eksqa["EKS/namespace QA"]
+  uat --> eksuat["EKS/namespace UAT"]
+  tf["Terraform plan/apply"] --> qa
+  tf --> uat
+  tf --> prod
