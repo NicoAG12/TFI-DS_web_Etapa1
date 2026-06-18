@@ -1,0 +1,40 @@
+flowchart TB
+  subgraph k8s["Kubernetes Cluster - base Fase 4/4B"]
+    gateway["api-gateway"]
+    auth["auth-service"]
+    core["core-service"]
+    ventas["ventas-service"]
+    torneos["torneos-service"]
+    match["matchmaking-service"]
+    query["query-service"]
+    saga["saga-orchestrator"]
+
+    ai["ai-assistant-service<br/>NUEVO Fase 5"]
+    embed["embedding-worker<br/>soporte Fase 5"]
+    notif["notification-ai-worker<br/>soporte Fase 5"]
+  end
+
+  broker["RabbitMQ<br/>existente Fase 4/4B"]
+  redis["Redis<br/>existente Fase 4/4B"]
+  vector["Vector DB<br/>Pinecone / Chroma / Milvus"]
+  llm["Proveedor LLM<br/>API externa"]
+
+  gateway --> ai
+  ai --> vector
+  ai --> llm
+  ai --> redis
+
+  core --> broker
+  torneos --> broker
+  match --> broker
+  broker --> embed
+  embed --> vector
+
+  match --> broker
+  broker --> notif
+  notif --> llm
+  notif --> broker
+
+  saga --> broker
+  query --> redis
+

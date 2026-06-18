@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  vector-db:
+    image: chromadb/chroma:latest
+    container_name: tfi-fase5-vector-db
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  ai-assistant-service:
+    build:
+      context: ./apps/ai-assistant-service
+      dockerfile: Dockerfile
+    container_name: tfi-ai-assistant-service
+    ports:
+      - "4401:4401"
+    environment:
+      PORT: "4401"
+      VECTOR_DB_URL: http://vector-db:8000
+      LLM_PROVIDER: openai
+      LLM_TIMEOUT_MS: "5000"
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+    depends_on:
+      - vector-db
+
+  embedding-worker:
+    build:
+      context: ./apps/embedding-worker
+      dockerfile: Dockerfile
+    container_name: tfi-embedding-worker
+    environment:
+      VECTOR_DB_URL: http://vector-db:8000
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      EMBEDDING_PROVIDER: openai
+    depends_on:
+      - vector-db
+
+  notification-ai-worker:
+    build:
+      context: ./apps/notification-ai-worker
+      dockerfile: Dockerfile
+    container_name: tfi-notification-ai-worker
+    environment:
+      LLM_PROVIDER: openai
+      LLM_TIMEOUT_MS: "3000"
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+
+volumes:
+  chroma_data:
+

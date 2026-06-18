@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vector-db
+  namespace: tfi-prod
+  labels:
+    app: vector-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vector-db
+  template:
+    metadata:
+      labels:
+        app: vector-db
+    spec:
+      containers:
+        - name: vector-db
+          image: chromadb/chroma:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+

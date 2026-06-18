@@ -35,6 +35,18 @@ Esta frase deja claro que:
 - La IA entra como extension, no como reemplazo del sistema.
 - La arquitectura sigue siendo defendible ante un CTO.
 
+## Ajuste pedido sobre carpetas y Kubernetes
+
+La lectura correcta es:
+
+- No modificar carpetas de fases anteriores.
+- No rehacer la infraestructura de Fase 4/4B.
+- Crear en `Etapa5/` el corte de carpetas que muestre la extension IA.
+- Mostrar explicitamente un servicio mas dentro de Kubernetes: `ai-assistant-service`.
+- Mostrar workers de soporte: `embedding-worker` y `notification-ai-worker`.
+
+Eso permite explicar que la infraestructura ya "vive" en Fase 4/4B, pero la arquitectura de Fase 5 agrega nuevas piezas dentro de ese entorno.
+
 ## Como integrarla al documento final
 
 Ubicar la Fase 5 despues de costos de Fase 4 y antes de conclusiones finales.
@@ -44,9 +56,9 @@ Estructura sugerida:
 1. Contexto de negocio.
 2. Decision: RAG principal + LLM para notificaciones.
 3. Diagrama de arquitectura.
-4. Flujo de consulta conversacional.
-5. Flujo de ingesta vectorial.
-6. Asincronismo, timeouts y fallbacks.
-7. Seguridad, privacidad y costos.
-8. Justificacion tecnica y de negocio.
-
+4. Diagrama del nuevo servicio dentro de Kubernetes.
+5. Flujo de consulta conversacional.
+6. Flujo de ingesta vectorial.
+7. Asincronismo, timeouts y fallbacks.
+8. Seguridad, privacidad y costos.
+9. Justificacion tecnica y de negocio.

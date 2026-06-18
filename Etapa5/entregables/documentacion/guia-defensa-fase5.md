@@ -8,6 +8,10 @@
 
 "La decision principal es separar la IA del core transaccional. Reservas, pagos y liberacion de turnos siguen funcionando aunque el proveedor LLM falle. La IA mejora la experiencia, pero no queda en el camino critico del negocio."
 
+## Aclaracion arquitectura vs infraestructura
+
+"La infraestructura base no se rehace en Fase 5 porque ya quedo planteada en Fase 4/4B con Kubernetes, Docker, Terraform, RabbitMQ, Redis y ambientes. Lo que modificamos ahora es la arquitectura de aplicacion: agregamos dentro del cluster un servicio nuevo llamado `ai-assistant-service`, mas workers asincronicos para embeddings y notificaciones."
+
 ## Como funciona RAG
 
 "Cada vez que cambia un turno, partido, cancha o torneo, el servicio de dominio publica un evento. Un worker consume ese evento, genera un embedding y actualiza una base vectorial. Cuando el usuario consulta en lenguaje natural, el asistente busca candidatos relevantes y recien ahi llama al LLM con contexto acotado."
@@ -19,4 +23,3 @@
 ## Cierre
 
 "El resultado final es una arquitectura cloud-ready, Event-Driven y ahora AI-ready: incorpora IA sin comprometer consistencia, disponibilidad ni costos. Es una evolucion incremental, no una reescritura."
-

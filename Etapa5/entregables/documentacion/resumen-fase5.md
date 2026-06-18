@@ -13,13 +13,15 @@ Para este proyecto se recomienda usar **RAG como arquitectura principal** y **LL
 
 La IA no reemplaza la arquitectura existente. Se agrega como una extension desacoplada:
 
-- `ai-assistant-service`: recibe consultas en lenguaje natural y coordina recuperacion + generacion.
-- `embedding-worker`: escucha eventos del broker y mantiene actualizado el indice vectorial.
-- `notification-ai-worker`: personaliza mensajes de matchmaking de forma asincronica.
+- `ai-assistant-service`: servicio nuevo dentro de Kubernetes. Recibe consultas en lenguaje natural y coordina recuperacion + generacion.
+- `embedding-worker`: deployment/worker de soporte. Escucha eventos del broker y mantiene actualizado el indice vectorial.
+- `notification-ai-worker`: deployment/worker de soporte. Personaliza mensajes de matchmaking de forma asincronica.
 - Base vectorial: Pinecone en produccion administrada, o Chroma/Milvus para laboratorio o despliegue autogestionado.
 - API LLM externa: proveedor configurable mediante secretos y variables de entorno.
 
 El criterio principal es evitar que una llamada a IA bloquee operaciones criticas como reservar un turno, registrar un pago o liberar una cancha.
+
+La infraestructura de Fase 4/4B no se rehace. Kubernetes, RabbitMQ, Redis, Terraform, ambientes y pipeline ya existen como base. Fase 5 solo agrega componentes de aplicacion y soporte IA dentro de ese ecosistema.
 
 ## 3. Caso de uso principal: asistente RAG de partidos y turnos
 
@@ -131,9 +133,26 @@ Mitigaciones:
 - Auditar prompts, respuestas, latencia y costo por request.
 - Guardar claves en Secrets Manager o Kubernetes Secrets, nunca en codigo.
 
-## 8. Infraestructura necesaria
+## 8. Cambio puntual dentro de Kubernetes
 
-Sobre Fase 4/4B se agregan:
+El cambio que debe verse en la arquitectura es que el cluster Kubernetes ahora contiene un servicio mas para IA:
+
+```text
+Kubernetes Cluster - Fase 4/4B
+  api-gateway
+  auth-service
+  core-service
+  ventas-service
+  torneos-service
+  matchmaking-service
+  query-service
+  saga-orchestrator
+  ai-assistant-service      <-- agregado Fase 5
+  embedding-worker          <-- soporte asincronico Fase 5
+  notification-ai-worker     <-- soporte asincronico Fase 5
+```
+
+Sobre Fase 4/4B se agregan estos componentes:
 
 | Componente | Funcion | Despliegue sugerido |
 | --- | --- | --- |
@@ -144,7 +163,9 @@ Sobre Fase 4/4B se agregan:
 | Secretos IA | API keys y configuracion de proveedor | AWS Secrets Manager/K8s Secret |
 | Observabilidad IA | Latencia, errores, tokens, costo, DLQ | CloudWatch/Grafana |
 
-En ambiente local se puede usar Chroma o Milvus via Docker Compose. En produccion AWS se puede usar Pinecone administrado para reducir operacion, o un servicio vectorial autogestionado si el costo manda.
+En ambiente local se puede usar Chroma via Docker Compose. En produccion AWS se puede usar Pinecone administrado para reducir operacion, o un servicio vectorial autogestionado si el costo manda.
+
+Esta decision mantiene la separacion correcta: **la infraestructura base ya esta hecha en Fase 4; la Fase 5 muestra una extension de arquitectura dentro de esa infraestructura**.
 
 ## 9. Observabilidad especifica de IA
 
@@ -167,7 +188,7 @@ Desde lo tecnico:
 
 - Aprovecha RabbitMQ y eventos existentes.
 - Mantiene el core transaccional separado de la IA.
-- Encaja con Kubernetes, Terraform y secretos de Fase 4.
+- Encaja con Kubernetes, Terraform y secretos de Fase 4 sin rehacerlos.
 - Usa una base vectorial para consultar datos propios y reducir respuestas inventadas.
 - Permite escalar workers de IA segun cola, no segun trafico general.
 

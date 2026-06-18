@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-assistant-service
+  namespace: tfi-prod
+  labels:
+    app: ai-assistant-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-assistant-service
+  template:
+    metadata:
+      labels:
+        app: ai-assistant-service
+    spec:
+      containers:
+        - name: ai-assistant-service
+          image: ghcr.io/mi-organizacion/ai-assistant-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4401
+          envFrom:
+            - configMapRef:
+                name: ai-config
+            - secretRef:
+                name: ai-secrets
+            - configMapRef:
+                name: app-config
+          env:
+            - name: PORT
+              value: "4401"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4401
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4401
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
