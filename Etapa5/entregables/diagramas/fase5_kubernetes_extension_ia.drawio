@@ -1,0 +1,100 @@
+<mxfile host="app.diagrams.net" modified="2026-06-18T15:42:44.923338+00:00" agent="Codex" version="24.7.17" type="device">
+  <diagram id="fase-5-kubernetes-extension-ia" name="Fase 5 Kubernetes Extension IA">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1450" pageHeight="720" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="k8s" value="Kubernetes Cluster - base Fase 4/4B" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fontSize=14;fontStyle=1;strokeWidth=2;dashed=1;spacing=12;fillColor=#f7f9fb;strokeColor=#607d8b;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="920" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="api-gateway" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="120" y="150" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" value="auth-service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="310" y="150" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="core" value="core-service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="500" y="150" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ventas" value="ventas-service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="690" y="150" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="torneos" value="torneos-service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="120" y="270" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="match" value="matchmaking-service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="310" y="270" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="query" value="query-service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="540" y="270" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="saga" value="saga-orchestrator" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="k8s">
+          <mxGeometry x="730" y="270" width="170" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ai" value="ai-assistant-service&lt;br&gt;NUEVO Fase 5" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#111111;fontStyle=1;" vertex="1" parent="k8s">
+          <mxGeometry x="180" y="430" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="embed" value="embedding-worker&lt;br&gt;soporte Fase 5" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#111111;fontStyle=1;" vertex="1" parent="k8s">
+          <mxGeometry x="450" y="430" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="notif" value="notification-ai-worker&lt;br&gt;soporte Fase 5" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#111111;fontStyle=1;" vertex="1" parent="k8s">
+          <mxGeometry x="720" y="430" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="broker" value="RabbitMQ&lt;br&gt;existente Fase 4/4B" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="150" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="redis" value="Redis&lt;br&gt;existente Fase 4/4B" style="shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="280" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="vector" value="Vector DB&lt;br&gt;Pinecone / Chroma / Milvus" style="shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="420" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="llm" value="Proveedor LLM&lt;br&gt;API externa" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="560" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="gateway" target="ai">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="ai" target="vector">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="ai" target="llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="ai" target="redis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="core" target="broker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="torneos" target="broker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="match" target="broker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="broker" target="embed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="embed" target="vector">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="broker" target="notif">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="notif" target="llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="notif" target="broker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="saga" target="broker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" edge="1" parent="1" source="query" target="redis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

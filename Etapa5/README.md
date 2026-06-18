@@ -39,8 +39,12 @@ En terminos simples:
 - `entregables/documentacion/revision-documento-word.md`: revision critica del borrador recibido.
 - `entregables/documentacion/guia-defensa-fase5.md`: guion breve para defensa oral.
 - `entregables/documentacion/checklist-fase5.md`: control final antes de integrar al informe.
-- `entregables/diagramas/fase5_arquitectura_ia_rag.mmd`: diagrama editable del flujo IA/RAG.
-- `entregables/diagramas/fase5_kubernetes_extension_ia.mmd`: diagrama editable del nuevo servicio dentro de Kubernetes.
+- `entregables/diagramas/fase5_arquitectura_ia_rag.mmd`: diagrama Mermaid del flujo IA/RAG.
+- `entregables/diagramas/fase5_arquitectura_ia_rag.drawio`: version editable en draw.io del flujo IA/RAG.
+- `entregables/diagramas/fase5_arquitectura_ia_rag.png`: version PNG para insertar en documentos o presentaciones.
+- `entregables/diagramas/fase5_kubernetes_extension_ia.mmd`: diagrama Mermaid del nuevo servicio dentro de Kubernetes.
+- `entregables/diagramas/fase5_kubernetes_extension_ia.drawio`: version editable en draw.io del nuevo servicio dentro de Kubernetes.
+- `entregables/diagramas/fase5_kubernetes_extension_ia.png`: version PNG para insertar en documentos o presentaciones.
 
 ## Corte de carpetas de arquitectura
 

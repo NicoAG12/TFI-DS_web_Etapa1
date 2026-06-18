@@ -1,0 +1,100 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram id="fase-4-pipeline-ci-cd" name="Fase 4 Pipeline CI CD">
+    <mxGraphModel dx="1928" dy="1446" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#e8f5e9;strokeColor=#2e7d32;fontColor=#111111;fontStyle=1;" value="FASE 4 - Pipeline CI/CD + GitFlow" vertex="1">
+          <mxGeometry height="50" width="520" x="350" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="feature" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="feature/*" vertex="1">
+          <mxGeometry height="70" width="160" x="65" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="pr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="Pull Request" vertex="1">
+          <mxGeometry height="70" width="160" x="65" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="ci" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="CI&lt;br&gt;lint + tests + build" vertex="1">
+          <mxGeometry height="70" width="210" x="40" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="develop" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="develop" vertex="1">
+          <mxGeometry height="70" width="160" x="300" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="qa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="Deploy automatico QA" vertex="1">
+          <mxGeometry height="70" width="210" x="300" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="release" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="release/*" vertex="1">
+          <mxGeometry height="70" width="160" x="570" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="uat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="Deploy UAT&lt;br&gt;aprobacion manual + smoke tests" vertex="1">
+          <mxGeometry height="70" width="210" x="1030" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="main" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="main + tag" vertex="1">
+          <mxGeometry height="70" width="160" x="870" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="prod" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="Deploy Produccion&lt;br&gt;rolling update + rollback" vertex="1">
+          <mxGeometry height="70" width="210" x="700" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="ecr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="Push imagenes a ECR" vertex="1">
+          <mxGeometry height="70" width="210" x="340" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="eksqa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="EKS / namespace QA" vertex="1">
+          <mxGeometry height="40" width="160" x="520" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="eksuat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="EKS / namespace UAT" vertex="1">
+          <mxGeometry height="70" width="190" x="1120" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="eks" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="EKS Produccion" vertex="1">
+          <mxGeometry height="70" width="190" x="710" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="tf" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="Terraform plan/apply" vertex="1">
+          <mxGeometry height="70" width="210" x="700" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="feature" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="pr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="pr" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="ci">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="ci" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="develop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="develop" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="qa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="qa" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="release">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="release" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="uat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="uat" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="main">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="main" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="prod">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="ci" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="ecr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="qa" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="eksqa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="uat" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="eksuat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="prod" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="eks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="tf" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="qa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="tf" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="uat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="tf" style="endArrow=block;html=1;rounded=1;strokeWidth=2;strokeColor=#222222;fontColor=#111111;fontSize=11;" target="prod">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -32,7 +32,9 @@ Etapa4/
 - `entregables/documentacion/guia-defensa-fase4.md`: guion para defender la fase oralmente.
 - `entregables/documentacion/checklist-fase4.md`: checklist de revision antes de entregar.
 - `entregables/diagramas/fase4_infraestructura_aws.mmd`: diagrama de infraestructura.
+- `entregables/diagramas/fase4_infraestructura_aws.drawio`: version editable en draw.io del diagrama de infraestructura.
 - `entregables/diagramas/fase4_pipeline_ci_cd.mmd`: diagrama del pipeline CI/CD.
+- `entregables/diagramas/fase4_pipeline_ci_cd.drawio`: version editable en draw.io del pipeline CI/CD.
 - `entregables/documentos/TFI_ArquitecturaWeb_Fase4.docx`: documento Word final.
 
 ## Criterio usado
