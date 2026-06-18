@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matchmaking-service
+  namespace: tfi-prod
+  labels:
+    app: matchmaking-service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: matchmaking-service
+  template:
+    metadata:
+      labels:
+        app: matchmaking-service
+    spec:
+      containers:
+        - name: matchmaking-service
+          image: ghcr.io/mi-organizacion/matchmaking-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4205
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+          env:
+            - name: PORT
+              value: "4205"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4205
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4205
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3

@@ -1,0 +1,246 @@
+name: CI/CD — TFI Deploy
+
+on:
+  push:
+    branches: [dev, staging, main]
+  pull_request:
+    branches: [dev, main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository }}
+
+jobs:
+  # ═══════════════════════════════════════════════════════
+  # JOB 1: Tests y Build
+  # ═══════════════════════════════════════════════════════
+  test-and-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - api-gateway
+          - auth-service
+          - core-service
+          - ventas-service
+          - torneos-service
+          - matchmaking-service
+          - query-service
+          - saga-orchestrator
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: tfi_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      rabbitmq:
+        image: rabbitmq:3-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: test
+          RABBITMQ_DEFAULT_PASS: test
+        ports:
+          - 5672:5672
+        options: >-
+          --health-cmd "rabbitmq-diagnostics ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: apps/${{ matrix.service }}/package-lock.json
+
+      - name: Instalar dependencias
+        working-directory: apps/${{ matrix.service }}
+        run: npm ci
+
+      - name: Lint
+        working-directory: apps/${{ matrix.service }}
+        run: npm run lint -- --max-warnings=0 || true
+        continue-on-error: true
+
+      - name: Tests unitarios
+        working-directory: apps/${{ matrix.service }}
+        run: npm run test -- --passWithNoTests
+        env:
+          DATABASE_URL: postgres://test:test@localhost:5432/tfi_test
+          REDIS_URL: redis://localhost:6379
+          RABBITMQ_URL: amqp://test:test@localhost:5672
+          JWT_SECRET: test_secret_for_ci
+
+      - name: Tests de integración
+        working-directory: apps/${{ matrix.service }}
+        run: npm run test:e2e -- --passWithNoTests
+        env:
+          DATABASE_URL: postgres://test:test@localhost:5432/tfi_test
+          REDIS_URL: redis://localhost:6379
+          RABBITMQ_URL: amqp://test:test@localhost:5672
+          JWT_SECRET: test_secret_for_ci
+
+      - name: Build
+        working-directory: apps/${{ matrix.service }}
+        run: npm run build
+
+  # ═══════════════════════════════════════════════════════
+  # JOB 2: Docker Build + Push
+  # ═══════════════════════════════════════════════════════
+  docker:
+    needs: test-and-build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - api-gateway
+          - auth-service
+          - core-service
+          - ventas-service
+          - torneos-service
+          - matchmaking-service
+          - query-service
+          - saga-orchestrator
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login a GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build y Push de imagen Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/${{ matrix.service }}
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }}
+            ghcr.io/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ═══════════════════════════════════════════════════════
+  # JOB 3A: Deploy a QA (Hetzner con Docker Compose)
+  # ═══════════════════════════════════════════════════════
+  deploy-qa:
+    needs: docker
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    environment:
+      name: qa
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy a QA (Docker Compose)
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_QA_IP }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/tfi
+            echo "TAG=${{ github.sha }}" > .env
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+            docker image prune -f
+            echo "QA deployed: $(date)"
+
+  # ═══════════════════════════════════════════════════════
+  # JOB 3B: Deploy a UAT
+  # ═══════════════════════════════════════════════════════
+  deploy-uat:
+    needs: docker
+    if: startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    environment:
+      name: uat
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy a UAT (Kubernetes / k3s)
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_UAT_IP }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            export KUBECONFIG=/home/deploy/.kube/config
+            
+            for svc in api-gateway auth-service core-service ventas-service torneos-service matchmaking-service query-service saga-orchestrator; do
+              kubectl set image deployment/$svc \
+                $svc=ghcr.io/${{ env.IMAGE_PREFIX }}/$svc:${{ github.sha }} \
+                -n tfi-uat
+              kubectl rollout status deployment/$svc -n tfi-uat --timeout=120s
+            done
+            echo "UAT deployed: $(date)"
+
+  # ═══════════════════════════════════════════════════════
+  # JOB 3C: Deploy a Producción
+  # ═══════════════════════════════════════════════════════
+  deploy-prod:
+    needs: docker
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar kubectl para EKS (AWS)
+        if: vars.CLOUD_PROVIDER == 'aws'
+        run: |
+          aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name tfi-prod
+
+      - name: Deploy a Producción (Kubernetes)
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_PROD_IP }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            export KUBECONFIG=/home/deploy/.kube/config
+
+            for svc in api-gateway auth-service core-service ventas-service torneos-service matchmaking-service query-service saga-orchestrator; do
+              kubectl set image deployment/$svc \
+                $svc=ghcr.io/${{ env.IMAGE_PREFIX }}/$svc:${{ github.sha }} \
+                -n tfi-prod
+            done
+
+            echo "Waiting for rollout..."
+            for svc in api-gateway auth-service core-service ventas-service torneos-service matchmaking-service query-service saga-orchestrator; do
+              kubectl rollout status deployment/$svc -n tfi-prod --timeout=180s || {
+                echo "Rollout failed for $svc, rolling back..."
+                kubectl rollout undo deployment/$svc -n tfi-prod
+                exit 1
+              }
+            done
+            echo "Prod deployed: $(date)"

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ventas-service
+  namespace: tfi-prod
+  labels:
+    app: ventas-service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ventas-service
+  template:
+    metadata:
+      labels:
+        app: ventas-service
+    spec:
+      containers:
+        - name: ventas-service
+          image: ghcr.io/mi-organizacion/ventas-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4203
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+          env:
+            - name: PORT
+              value: "4203"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4203
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4203
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3

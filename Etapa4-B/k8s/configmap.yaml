@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: tfi-prod
+data:
+  NODE_ENV: "production"
+  AUTH_SERVICE_URL: "http://auth-service:4201"
+  CORE_SERVICE_URL: "http://core-service:4202"
+  VENTAS_SERVICE_URL: "http://ventas-service:4203"
+  TORNEOS_SERVICE_URL: "http://torneos-service:4204"
+  MATCHMAKING_SERVICE_URL: "http://matchmaking-service:4205"
+  QUERY_SERVICE_URL: "http://query-service:4302"
+  SAGA_ORCHESTRATOR_URL: "http://saga-orchestrator:4301"
+  REDIS_URL: "redis://redis:6379"
+  RABBITMQ_URL: "amqp://tfi_prod:${RABBITMQ_PASS}@rabbitmq:5672"

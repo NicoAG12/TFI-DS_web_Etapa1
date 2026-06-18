@@ -1,0 +1,206 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tfi-postgres
+    environment:
+      POSTGRES_USER: tfi_dev
+      POSTGRES_PASSWORD: dev_password_123
+      POSTGRES_DB: tfi_development
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tfi_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: tfi-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: tfi-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: tfi_dev
+      RABBITMQ_DEFAULT_PASS: dev_password_123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ./apps/api-gateway
+      dockerfile: Dockerfile
+    container_name: tfi-api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      JWT_SECRET: dev_jwt_secret_key_change_in_prod
+      AUTH_SERVICE_URL: http://auth-service:4201
+      CORE_SERVICE_URL: http://core-service:4202
+      VENTAS_SERVICE_URL: http://ventas-service:4203
+      TORNEOS_SERVICE_URL: http://torneos-service:4204
+      MATCHMAKING_SERVICE_URL: http://matchmaking-service:4205
+      QUERY_SERVICE_URL: http://query-service:4302
+      SAGA_ORCHESTRATOR_URL: http://saga-orchestrator:4301
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  auth-service:
+    build:
+      context: ./apps/auth-service
+      dockerfile: Dockerfile
+    container_name: tfi-auth-service
+    ports:
+      - "4201:4201"
+    environment:
+      PORT: "4201"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      JWT_SECRET: dev_jwt_secret_key_change_in_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  core-service:
+    build:
+      context: ./apps/core-service
+      dockerfile: Dockerfile
+    container_name: tfi-core-service
+    ports:
+      - "4202:4202"
+    environment:
+      PORT: "4202"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      JWT_SECRET: dev_jwt_secret_key_change_in_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  ventas-service:
+    build:
+      context: ./apps/ventas-service
+      dockerfile: Dockerfile
+    container_name: tfi-ventas-service
+    ports:
+      - "4203:4203"
+    environment:
+      PORT: "4203"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      JWT_SECRET: dev_jwt_secret_key_change_in_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  torneos-service:
+    build:
+      context: ./apps/torneos-service
+      dockerfile: Dockerfile
+    container_name: tfi-torneos-service
+    ports:
+      - "4204:4204"
+    environment:
+      PORT: "4204"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      JWT_SECRET: dev_jwt_secret_key_change_in_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  matchmaking-service:
+    build:
+      context: ./apps/matchmaking-service
+      dockerfile: Dockerfile
+    container_name: tfi-matchmaking-service
+    ports:
+      - "4205:4205"
+    environment:
+      PORT: "4205"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+      JWT_SECRET: dev_jwt_secret_key_change_in_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  query-service:
+    build:
+      context: ./apps/query-service
+      dockerfile: Dockerfile
+    container_name: tfi-query-service
+    ports:
+      - "4302:4302"
+    environment:
+      PORT: "4302"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  saga-orchestrator:
+    build:
+      context: ./apps/saga-orchestrator
+      dockerfile: Dockerfile
+    container_name: tfi-saga-orchestrator
+    ports:
+      - "4301:4301"
+    environment:
+      PORT: "4301"
+      DATABASE_URL: postgres://tfi_dev:dev_password_123@postgres:5432/tfi_development
+      RABBITMQ_URL: amqp://tfi_dev:dev_password_123@rabbitmq:5672
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+volumes:
+  pgdata_dev:

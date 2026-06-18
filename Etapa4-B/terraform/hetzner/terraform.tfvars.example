@@ -1,0 +1,2 @@
+hcloud_token = "TU_TOKEN_DE_API_DE_HETZNER"
+ssh_key_id   = "1234567"

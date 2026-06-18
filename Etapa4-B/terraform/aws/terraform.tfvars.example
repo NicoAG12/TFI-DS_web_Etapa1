@@ -1,0 +1,7 @@
+aws_region             = "us-east-1"
+environment            = "prod"
+eks_node_instance_type = "t3.medium"
+eks_node_count         = 2
+rds_instance_class     = "db.t3.medium"
+redis_node_type        = "cache.t4g.small"
+mq_instance_type       = "mq.t3.micro"

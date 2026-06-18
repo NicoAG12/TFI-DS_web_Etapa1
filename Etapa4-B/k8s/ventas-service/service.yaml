@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ventas-service
+  namespace: tfi-prod
+spec:
+  type: ClusterIP
+  selector:
+    app: ventas-service
+  ports:
+    - port: 4203
+      targetPort: 4203
