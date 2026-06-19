@@ -53,10 +53,10 @@
           <mxGeometry height="70" width="220" x="235" y="610" as="geometry" />
         </mxCell>
         <mxCell id="redis" parent="1" style="shape=cylinder3d;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=13;strokeWidth=2;spacing=8;fillColor=#ffffff;strokeColor=#222222;fontColor=#111111;" value="Redis&lt;br&gt;cache consultas frecuentes" vertex="1">
-          <mxGeometry height="70" width="230" x="830" y="60" as="geometry" />
+          <mxGeometry height="70" width="230" x="830" y="70" as="geometry" />
         </mxCell>
         <mxCell id="obs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="Observabilidad&lt;br&gt;latencia / tokens / costo / errores" vertex="1">
-          <mxGeometry height="80" width="200" x="700" y="455" as="geometry" />
+          <mxGeometry height="80" width="200" x="680" y="465" as="geometry" />
         </mxCell>
         <mxCell id="safe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=13;strokeWidth=2;spacing=8;fillColor=#fff8e1;strokeColor=#f9a825;fontColor=#111111;" value="Regla de negocio&lt;br&gt;Reservas y pagos no dependen de IA" vertex="1">
           <mxGeometry height="50" width="210" x="25" y="410" as="geometry" />
